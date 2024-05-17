@@ -6,12 +6,17 @@ const initialDictionary = [
   { word: "State", meaning: "An object that stores data for a component." }
 ];
 
-export default function Dictionary() {
+function Dictionary() {
   const [dictionary] = useState(initialDictionary);
   const [searchTerm, setSearchTerm] = useState('');
   const [result, setResult] = useState('');
 
   const handleSearch = () => {
+    if (searchTerm.trim() === '') {
+      setResult("");
+      return;
+    }
+
     const found = dictionary.find(item => item.word.toLowerCase() === searchTerm.toLowerCase());
     if (found) {
       setResult(found.meaning);
@@ -21,22 +26,24 @@ export default function Dictionary() {
   };
 
   return (
-    <div>
+    <div className="Dictionary">
       <h1>Dictionary App</h1>
-      <div>
+      <div className="search-bar">
         <input
           type="text"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          placeholder="Search for a word..."
+          placeholder="Enter a word"
+          aria-label="Search term"
         />
-        <button onClick={handleSearch}>Search</button>
+        <button type="button" onClick={handleSearch}>Search</button>
         <p><b>Definition:</b></p>
       </div>
-      <div>
+      <div className="result">
         {result && <p>{result}</p>}
       </div>
     </div>
   );
 }
 
+export default Dictionary;
