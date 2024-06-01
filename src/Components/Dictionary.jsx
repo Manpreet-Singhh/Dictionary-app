@@ -1,49 +1,43 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
-const initialDictionary = [
+const dictionary = [
   { word: "React", meaning: "A JavaScript library for building user interfaces." },
   { word: "Component", meaning: "A reusable building block in React." },
-  { word: "State", meaning: "An object that stores data for a component." }
+  { word: "State", meaning: "An object that stores data for a component." },
 ];
 
-function Dictionary() {
-  const [dictionary] = useState(initialDictionary);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [result, setResult] = useState('');
+function App() {
+  const [definition, setDefinition] = useState("");
 
-  const handleSearch = () => {
-    if (searchTerm.trim() === '') {
-      setResult("");
-      return;
-    }
-
-    const found = dictionary.find(item => item.word.toLowerCase() === searchTerm.toLowerCase());
-    if (found) {
-      setResult(found.meaning);
+  const submitHandler = (e) => {
+    e.preventDefault();
+    console.log(e.target.word.value);
+    const word = e.target.word.value.toLowerCase();
+    const matchingEntry = dictionary.find(
+      (entry) => entry.word.toLowerCase() === word
+    );
+    if (matchingEntry) {
+      setDefinition(matchingEntry.meaning);
     } else {
-      setResult("Word not found in the dictionary.");
+      setDefinition("");
     }
   };
 
   return (
-    <div className="Dictionary">
+    <div className="App">
       <h1>Dictionary App</h1>
-      <div className="search-bar">
-        <input
-          type="text"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          placeholder="Enter a word"
-          aria-label="Search term"
-        />
-        <button type="button" onClick={handleSearch}>Search</button>
-        <p><b>Definition:</b></p>
-      </div>
-      <div className="result">
-        {result && <p>{result}</p>}
-      </div>
+      <form onSubmit={submitHandler}>
+        <input type="text" name="word" placeholder="Search for a word..." />
+        <button type="submit">Search</button>
+      </form>
+      <h3>Definition:</h3>
+      {definition ? (
+        <p>{definition}</p>
+      ) : (
+        <p>Word not found in the dictionary.</p>
+      )}
     </div>
   );
 }
 
-export default Dictionary;
+export default App;
